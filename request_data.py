@@ -2,13 +2,13 @@ import json
 import urllib3
 from retry import retry
 from urllib.error import HTTPError
-from concurrent.futures import ThreadPoolExecutor
+
 
 
 http = urllib3.PoolManager()
 
 # If the function catches an HTTPError, it will retry 4 times
-@retry(exception=HTTPError, tries=4, delay=3, backoff=2)
+@retry(exceptions=HTTPError, tries=4, delay=3, backoff=2)
 def get_data(url: str):
 
     # Defining URL, if it returns a status different than 200, it'll raise an error
@@ -20,7 +20,7 @@ def get_data(url: str):
 
     try:
 
-        value = json.loads(url.data.decode('utf-8'))
+        value = url.data.decode('utf-8')
         
         return value
 
@@ -29,13 +29,5 @@ def get_data(url: str):
 
 
 
-all_results = []
-with ThreadPoolExecutor(max_workers=80) as executor:
-        all_numbers = []
-        for i in range(0, 50):
-            all_numbers.append(i)
 
-        
-        for i in executor.map(get_data, all_numbers):
-            print(i)
 

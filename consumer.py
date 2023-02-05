@@ -5,6 +5,8 @@ def message_consumer(topics: list, consumer: dict):
 
     c = Consumer(consumer)
 
+    c.subscribe(topics)
+
     while True:
 
         msg = c.poll(1.0)  # timeout

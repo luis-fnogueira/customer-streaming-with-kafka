@@ -3,7 +3,7 @@ import urllib3
 from retry import retry
 from urllib.error import HTTPError
 
-
+# Manages the connections
 http = urllib3.PoolManager()
 
 # If the function catches an HTTPError, it will retry 4 times

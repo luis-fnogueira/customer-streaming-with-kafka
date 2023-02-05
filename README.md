@@ -1,7 +1,6 @@
 # Streaming of customers registering using Kafka
-### This project simulates the streamings of users signing up on a website. I use an [open API](https://random-data-api.com/documentation) to request data and send them to a Kafka topic as it were new customers signing up.
-### My goal was to create a modular code to manage these situations, following SOLID best practices and a documented code.
-
+This project simulates the streamings of users signing up on a website. I use an [open API](https://random-data-api.com/documentation) to request data and send them to a Kafka topic as it were new customers signing up.
+My goal was to create a modular code to manage this situation, following SOLID best practices and creating a documented code.
 
 
 # 1. Creating the topic

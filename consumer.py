@@ -4,7 +4,8 @@ from confluent_kafka import Consumer
 def message_consumer(topics: list, consumer: dict):
 
     """
-    This function acts as a consumer of a Kafka topic.
+    This function acts as a consumer of a Kafka topic. If there are no messages
+    it just keeps waiting. In case of error, it will display it. 
 
     Arguments:
         Topics: list.

@@ -1,0 +1,3 @@
+kafka-topics --bootstrap-server localhost:9092 --topic user-tracker --create --partitions 10 --replication-factor 1                 
+
+Created topic user-tracker.

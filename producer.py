@@ -2,7 +2,7 @@ from receipt import receipt
 from confluent_kafka import Producer
 
 
-def send_message(message: str, host: dict):
+def send_message(message: str, host: dict, topic: str, partition: int):
 
     """
     This function sends message to topic on Kafka.
@@ -22,7 +22,7 @@ def send_message(message: str, host: dict):
     p.poll(1)
 
     # Effectively sends message
-    p.produce(topic="user-tracker", value=message, callback=receipt)
+    p.produce(topic=topic, value=message, callback=receipt, partition=partition)
 
     # blocking producer until previous messaged have been delivered effectively, to make it synchronous.
     p.flush()

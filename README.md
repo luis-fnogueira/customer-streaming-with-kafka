@@ -26,21 +26,20 @@ I decided to separate the "creation" of data to the actual production of data in
     @retry(exceptions=HTTPError, tries=4, delay=3, backoff=2)
         def get_data(url: str):
 
-        # Defining URL, if it returns a status different than 200, it'll raise an error
-        url = http.request(method="GET", url=r"https://random-data-api.com/api/v2/users")
+            url = http.request(method="GET", url=f"{url}")
 
-        if url.status != 200:
+            if url.status != 200:
 
-            raise HTTPError
+                raise HTTPError
 
-        try:
+            try:
 
-            value = url.data.decode("utf-8")
+                value = url.data.decode("utf-8")
 
-            return value
+                return value
 
-        except (json.JSONDecodeError, HTTPError):
-            return url.data.decode("utf-8")
+            except (json.JSONDecodeError, HTTPError):
+                return url.data.decode("utf-8")
 
 ## 2.2 send_message
 
@@ -119,20 +118,22 @@ After declaring these functions, I used them in the `message_sender.py` file. I 
     # Defining which topic will receive the message
     topic = "user-tracker"
 
-    all_results = []
-    # Requesting data with 200 threads
-    with ThreadPoolExecutor(max_workers=200) as executor:
+    # Requests where requests will be made
+    url = "https://random-data-api.com/api/v2/users"
 
-        # Creating an array to iterate
-        all_numbers = []
-        for i in range(0, 200):
-            all_numbers.append(i)
+    while True:
 
-        # Effectively sending message to the topic
-        for i in executor.map(get_data, all_numbers):
+        with ThreadPoolExecutor(max_workers=80) as executor:
 
+            # Requesting data
+            data = executor.submit(get_data, url)
+
+            # Sending message to the topic in a random partition
             send_message(
-                message=i, host=kafka_port, topic=topic, partition=np.random.randint(0, 10)
+                message=data.result(),
+                host=kafka_port,
+                topic=topic,
+                partition=np.random.randint(0, 10),
             )
 
 # 3. Consuming messages

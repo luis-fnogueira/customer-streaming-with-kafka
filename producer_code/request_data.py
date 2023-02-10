@@ -22,9 +22,11 @@ def get_data(url: str):
         The data decoded in utf-8.
     """
 
-    # Defining URL, if it returns a status different than 200, it'll raise an error
+    # Defining URL and making the request.
+    
     url = http.request(method="GET", url=f"{url}")
 
+    # if it returns a status different than 200, it'll raise an error
     if url.status != 200:
 
         raise HTTPError

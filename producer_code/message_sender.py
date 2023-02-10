@@ -10,18 +10,20 @@ kafka_port = {"bootstrap.servers": "localhost:9092"}
 # Defining which topic will receive the message
 topic = "user-tracker"
 
-all_results = []
-# Requesting data with 200 threads
-with ThreadPoolExecutor(max_workers=200) as executor:
+# Requests where requests will be made
+url = "https://random-data-api.com/api/v2/users"
 
-    # Creating an array to iterate
-    all_numbers = []
-    for i in range(0, 200):
-        all_numbers.append(i)
+while True:
 
-    # Effectively sending message to the topic
-    for i in executor.map(get_data, all_numbers):
+    with ThreadPoolExecutor(max_workers=80) as executor:
 
+        # Defining URL, if it returns a status different than 200, it'll raise an error
+        data = executor.submit(get_data, url)
+
+        # Sending message to the topic in a random partition
         send_message(
-            message=i, host=kafka_port, topic=topic, partition=np.random.randint(0, 10)
+            message=data.result(),
+            host=kafka_port,
+            topic=topic,
+            partition=np.random.randint(0, 10),
         )

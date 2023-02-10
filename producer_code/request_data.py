@@ -10,8 +10,20 @@ http = urllib3.PoolManager()
 @retry(exceptions=HTTPError, tries=4, delay=3, backoff=2)
 def get_data(url: str):
 
+    """
+    This function makes a GET request to the url passed in the arguments.
+
+    Arguments:
+        url: str.
+        The url where the request will be made.
+
+    Returns:
+
+        The data decoded in utf-8.
+    """
+
     # Defining URL, if it returns a status different than 200, it'll raise an error
-    url = http.request(method="GET", url=r"https://random-data-api.com/api/v2/users")
+    url = http.request(method="GET", url=f"{url}")
 
     if url.status != 200:
 
